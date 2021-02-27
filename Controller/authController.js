@@ -15,7 +15,7 @@ const Signin = async (req, res) => {
             return res.status(200).json({message : constant.USER_LOGIN_SUCCESS, code : 200, data})
         }
     }
-    return res.status(404).json({message : constant.USER_LOGIN_ERROR, code : 404})
+    return res.status(206).json({message : constant.USER_LOGIN_ERROR, code : 206})
 }
 
 const SignUp = async (req, res) => {
@@ -26,7 +26,7 @@ const SignUp = async (req, res) => {
     user.email = email
     await user.save(err => {
         if(err){
-            return res.status(404).json({message : constant.USER_SIGNUP_ERROR, code : 404, error : err.errors})
+            return res.status(206).json({message : constant.USER_SIGNUP_ERROR, code : 206, error : err.errors})
         } else {
             return res.status(200).json({message : constant.USER_SIGNUP_SUCCESS, code : 200})
         }

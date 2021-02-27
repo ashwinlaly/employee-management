@@ -5,6 +5,9 @@ module.exports = [
     check('email')
         .trim()
         .escape()
+        .notEmpty()
+        .withMessage("Password Cannot be Empty")
+        .bail()
         .isEmail()
         .withMessage("Email Format is Invalid")
         .bail()
@@ -23,7 +26,7 @@ module.exports = [
     (req, res, next) => {
         let errors = validationResult(req).formatWith(errorFormatter)
         if(!errors.isEmpty()){
-            return res.status(422).json({message: errors.array(),code : 422})
+            return res.status(200).json({message: errors.array(),code : 422})
         }
         next()
     }
