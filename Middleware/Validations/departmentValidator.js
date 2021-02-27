@@ -1,5 +1,6 @@
 const {check, validationResult} = require("express-validator")
 const {errorFormatter} = require("../Helpers/responseHelper")
+const constant = require("../../constant");
 
 module.exports = [
     check("name")
@@ -21,7 +22,7 @@ module.exports = [
     (req, res, next) => {
         let errors = validationResult(req).formatWith(errorFormatter)
         if(!errors.isEmpty()){
-            return res.status(200).json({message: errors.array(),code : 422})
+            return res.status(200).json({message: constant.CREATE_DEPARTMENT_ERROR,code : 422, error: errors.array()})
         }
         next()
     }
