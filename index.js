@@ -2,6 +2,7 @@ require("dotenv").config()
 const express = require("express"),
     app = express(),
     constant = require("./constant"),
+    cors = require("cors"),
     routes = require("./Route/route")(),
     db = require("./db")
     bodyParser = require("body-parser");
@@ -9,6 +10,7 @@ const express = require("express"),
 app.use(bodyParser.urlencoded({extended : true}))
 app.use(bodyParser.json())
 
+app.use(cors());
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "*");
