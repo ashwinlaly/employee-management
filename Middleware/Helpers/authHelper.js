@@ -38,10 +38,11 @@ const verifyToken = async (req, res, next) => {
     let {ACCESS_TOKEN_SECRET} = process.env
     message = constants.INVALID_USER_ACCESS
     try {
-        let access_token = req.body.access_token
+        let access_token = req.headers["authorization"]
         if(_.isEmpty(access_token)){
             return res.status(403).send({message, code: 403})
         }
+        access_token = req.headers["authorization"].split(" ")[1]
         req.user_id = await jwt.decode(access_token)["id"]
         jwt.verify(access_token, ACCESS_TOKEN_SECRET)
     } catch (error) {
