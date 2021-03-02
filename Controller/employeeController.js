@@ -56,7 +56,7 @@ const updateEmployee = async (req, res) => {
 
 const deleteEmployee = async (req, res) => {
     _id = req.params.id
-    await User.findOneAndDelete(_id, (error, data) => {
+    await User.findByIdAndDelete(_id, (error, data) => {
         if(_.isEmpty(data)) {
             return res.status(200).json({message: constant.DELETE_EMPLOYEE_SUCCESS, code: 200})
         } else {

@@ -24,7 +24,7 @@ const getOneProject = (req, res) => {
 
 const deleteProject = (req, res) => {
     _id = req.params.id
-    Project.findOneAndDelete(_id, (error, data) => {
+    Project.findByIdAndDelete(_id, (error, data) => {
         if(!_.isEmpty(data)) {
             return res.status(200).json({message: constant.DELETE_PROJECT_SUCCESS, code: 200})
         } else {
