@@ -8,7 +8,7 @@ const getAllProject = (req, res) => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_PROJECT_SUCCESS, code: 200, data})
         }
-        return res.status(206).json({message: constant.LISTING_PROJECT_ERROR, code: 206})
+        return res.status(206).json({message: constant.LISTING_PROJECT_ERROR, code: 206, data: []})
     })
 }
 
@@ -26,7 +26,9 @@ const deleteProject = (req, res) => {
     _id = req.params.id
     Project.findByIdAndDelete(_id, (error, data) => {
         if(!_.isEmpty(data)) {
-            return res.status(200).json({message: constant.DELETE_PROJECT_SUCCESS, code: 200})
+            Project.find({}, '_id name').then(data => {
+                return res.status(200).json({message: constant.DELETE_PROJECT_SUCCESS, code: 200, data})
+            })
         } else {
             return res.status(206).json({message: constant.PROJECT_REMOVED_ALREADY, code: 206, error})
         }

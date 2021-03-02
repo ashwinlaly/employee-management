@@ -58,7 +58,7 @@ const deleteEmployee = async (req, res) => {
     _id = req.params.id
     await User.findByIdAndDelete(_id, (error, data) => {
         if(_.isEmpty(data)) {
-            return res.status(200).json({message: constant.DELETE_EMPLOYEE_SUCCESS, code: 200})
+            return res.status(200).json({message: constant.DELETE_EMPLOYEE_SUCCESS, code: 200, data})
         } else {
             return res.status(206).json({message: constant.EMPLOYEE_REMOVED_ALREADY, code: 206, error})
         }
@@ -70,7 +70,7 @@ const getAllEmployee = async (req, res) => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_EMPLOYEE_SUCCESS, code: 200, data})
         }
-        return res.status(206).json({message: constant.LISTING_EMPLOYEE_ERROR, code: 206})
+        return res.status(206).json({message: constant.LISTING_EMPLOYEE_ERROR, code: 206, data: []})
     })
 }
 
