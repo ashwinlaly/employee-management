@@ -21,10 +21,12 @@ const departmentController = require("../Controller/departmentController")
 module.exports = (function() {
     router.post("/signin", [signinValidator], authController.Signin)
     router.post("/signup", [signupValidator], authController.SignUp)
+    router.post("/reset/password", authController.ForgotPassword)
     router.post("/logout", authController.Logout)
 
     router.use("*", verifyToken)
     router.get("/employee", employeeController.getAllEmployee)
+    router.post("/profile/password", authController.ResetPassword)
     router.get("/employee/:id", employeeController.getOneEmployee)
     router.delete("/employee/:id", employeeController.deleteEmployee)
     router.post("/employee", [employeeValidator], employeeController.createEmployee)
@@ -45,7 +47,6 @@ module.exports = (function() {
     router.post("/leave/request", employeeController.applyLeave)
     router.post("/leave/approve", employeeController.approveLeave)
     router.get("/leave/history", employeeController.getLeaveHistory)
-    router.get("/leave/history/all", employeeController.getAllLeaveHistory)
 
     return router
 })

@@ -11,7 +11,7 @@ const projectSchema = new Mongoose.Schema({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'users'
     },
-    closes_at: { type: Date },
+    closes_at: { type: String, default: Date },
     status : {
         type : Boolean,
         default : true

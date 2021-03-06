@@ -74,10 +74,26 @@ const approvedLeave = ({from_date, to_date, reason}) => {
     )
 }
 
+const forgotPassword = (username, password) => {
+    return (
+        `<table>
+            <tr>
+                <td>Username </td>
+                <td>${username} </td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>${password}</td>
+            </tr>
+        </table>`
+    )
+}
+
 
 module.exports = {
     createAccount,
     applyForLeave,
     approvedLeave,
+    forgotPassword,
     employeeAppliedForLeave
 }

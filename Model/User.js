@@ -43,8 +43,11 @@ const userSchema = new Mongoose.Schema({
         type : String,
         trim : true
     }
-})
+}, { toJSON: { virtuals: true },  id: false  })
 
+userSchema.virtual('isAdmin').get(function() {
+    return this.department_id.name === "Administrator" ? true : false;
+});
 const User = Mongoose.model("users", userSchema);
 
 module.exports = User

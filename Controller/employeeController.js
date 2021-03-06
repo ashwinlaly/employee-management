@@ -57,8 +57,10 @@ const updateEmployee = async (req, res) => {
 const deleteEmployee = async (req, res) => {
     _id = req.params.id
     await User.findByIdAndDelete(_id, (error, data) => {
-        if(_.isEmpty(data)) {
-            return res.status(200).json({message: constant.DELETE_EMPLOYEE_SUCCESS, code: 200, data})
+        if(!_.isEmpty(data)) {
+            User.find({}, '_id name').then(data => {
+                return res.status(200).json({message: constant.DELETE_EMPLOYEE_SUCCESS, code: 200, data})
+            })
         } else {
             return res.status(206).json({message: constant.EMPLOYEE_REMOVED_ALREADY, code: 206, error})
         }
@@ -66,7 +68,7 @@ const deleteEmployee = async (req, res) => {
 }
 
 const getAllEmployee = async (req, res) => {
-    await User.find({}, '_id name email department_id').populate('department_id', '_id name original_name').then(data => {
+    await User.find({"_id": {$ne: req.user_id}}, '_id name email isAdmin department_id').populate('department_id', '_id name original_name').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_EMPLOYEE_SUCCESS, code: 200, data})
         }
@@ -76,11 +78,11 @@ const getAllEmployee = async (req, res) => {
 
 const getOneEmployee = async (req, res) => {
     user_id = req.params.id
-    await User.findById(user_id).then(data => {
+    await User.findById(user_id, '_id name email isAdmin department_id').populate('department_id', '_id name original_name').then(data => {
         if(!_.isEmpty(data)){
-            return res.status(200).json({message: constant.LISTING_EMPLOYEE_SUCCESS, code: 200, data})
+            return res.status(200).json({message: constant.GET_EMPLOYEE_SUCCESS, code: 200, data})
         }
-        return res.status(206).json({message: constant.LISTING_EMPLOYEE_ERROR, code: 206})
+        return res.status(206).json({message: constant.GET_EMPLOYEE_ERROR, code: 206})
     })
 }
 
@@ -95,8 +97,8 @@ const applyLeave = async (req, res) => {
         if(_.isEmpty(error)){
             const user = await User.findById(req.user_id)
             let leaveData = {
-                from_date : moment(leave.from_date).format("MM-DD-YYYY"),
-                to_date : moment(leave.to_date).format("MM-DD-YYYY"),
+                from_date : moment(leave.from_date).format("YYYY-MM-DD"),
+                to_date : moment(leave.to_date).format("YYYY-MM-DD"),
                 reason : leave.reason
             }
             const template = applyForLeave(leaveData)
@@ -109,33 +111,34 @@ const applyLeave = async (req, res) => {
 }
 
 const getLeaveHistory = async (req, res) => {
-    user_id = req.params.id
-    await Leave.find(user_id, '_id reason status').then(data => {
-        if(!_.isEmpty(data)){
-            return res.status(200).json({message: constant.GET_USER_LEAVE_SUCCESS, code: 200, data})
+    user_id = req.user_id
+    userInfo = await User.findById(user_id, '_id name email isAdmin department_id').populate('department_id', '_id name original_name').exec()
+    if(userInfo.department_id._id == "604123ee0805d53a640c4fa9") {
+        where = {}
+        if(!_.isEmpty(req.body.where)){
+            where = req.body.where
         }
-        return res.status(206).json({message: constant.GET_USER_LEAVE_ERROR, code: 206})
-    })
-}
-
-const getAllLeaveHistory = async (req, res) => {
-    where = {}
-    if(!_.isEmpty(req.body.where)){
-        where = req.body.where
-    }
-    await Leave.find(where, '_id reason status').populate({
-            path:"user", 
-            select:"_id name email",
-            populate:{
-                path:"department_id", 
-                select:"_id original_name"
-            }
-        }).then(data => {
+        await Leave.find(where, '_id reason status').populate({
+                path:"user", 
+                select:"_id name email",
+                populate:{
+                    path:"department_id", 
+                    select:"_id original_name"
+                }
+            }).then(data => {
+                if(!_.isEmpty(data)){
+                    return res.status(200).json({message: constant.GET_USER_LEAVE_SUCCESS, code: 200, data})
+                }
+            return res.status(206).json({message: constant.GET_USER_LEAVE_ERROR, code: 206})
+        })
+    } else {
+        await Leave.find({_id: user_id}, '_id reason status').then(data => {
             if(!_.isEmpty(data)){
                 return res.status(200).json({message: constant.GET_USER_LEAVE_SUCCESS, code: 200, data})
             }
-        return res.status(206).json({message: constant.GET_USER_LEAVE_ERROR, code: 206})
-    })
+            return res.status(206).json({message: constant.GET_USER_LEAVE_ERROR, code: 206})
+        })
+    }
 }
 
 const approveLeave = async (req, res) => {
@@ -167,6 +170,5 @@ module.exports = {
     getOneEmployee,
     applyLeave,
     approveLeave,
-    getLeaveHistory,
-    getAllLeaveHistory
+    getLeaveHistory
 }
