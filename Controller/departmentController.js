@@ -28,6 +28,7 @@ const createDepartment = async (req, res) => {
         if(_.isEmpty(data)) {
             let department = new Department;
             department.name = name
+            department.status = status
             department.original_name = original_name
             department.save(err => {
                 if(!err) {

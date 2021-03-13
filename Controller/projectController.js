@@ -5,7 +5,7 @@ const Project = require("../Model/Project");
 
 
 const getAllProject = (req, res) => {
-    Project.find({}, '_id name').then(data => {
+    Project.find({}, '_id name status').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_PROJECT_SUCCESS, code: 200, data})
         }
@@ -15,7 +15,7 @@ const getAllProject = (req, res) => {
 
 const getOneProject = (req, res) => {
     project_id = req.params.id
-    Project.findById(project_id, '_id name status lead closes_at').then(data => {
+    Project.findById(project_id, '_id name status lead closes_at status').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.GET_PROJECT_SUCCESS, code: 200, data})
         }
@@ -44,6 +44,7 @@ const createProject = (req, res) => {
             project.name = name
             project.lead = lead
             project.closes_at = moment(closes_at).format("YYYY-MM-DD")
+            project.status = status
             project.save(err => {
                 if(!err) {
                     return res.status(200).json({message: constant.CREATE_PROJECT_SUCCESS, code: 200})

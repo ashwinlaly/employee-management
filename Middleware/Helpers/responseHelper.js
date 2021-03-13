@@ -2,24 +2,32 @@ require("dotenv").config()
 const { isEmpty } = require("lodash");
 const _ = require("lodash");
 const Mongoose = require("mongoose");
-const Department = require("../../Model/Department");
 const User = require("../../Model/User");
-
+const Project = require("../../Model/Project");
+const Department = require("../../Model/Department");
 
 const errorFormatter = ({location, msg, param, value, nestedErrors}) => {
     return { msg, param }
 }
 
-const checkValidMongoID = (value) => {
+const checkValidMongoID = (value, type) => {
     const isValid = Mongoose.Types.ObjectId.isValid(value)
     if(isValid) {
-        return Department.findById(value).then(data => {
-            if(_.isEmpty(data)){
-                return Promise.reject("Department ID is invalid")
-            }
-        })
+        if(type.path === "department_id") {
+            return Department.findById(value).then(data => {
+                if(_.isEmpty(data)){
+                    return Promise.reject("Department ID is invalid")
+                }
+            })
+        } else if(type.path === "project") {
+            return Project.findById(value).then(data => {
+                if(_.isEmpty(data)){
+                    return Promise.reject("Project ID is invalid")
+                }
+            })
+        } else { }
     } else {
-        return Promise.reject("Department ID is invalid")    
+        return Promise.reject("Invalid ID passed")    
     }
 }
 

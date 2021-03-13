@@ -1,6 +1,8 @@
 const constant = require("../constant"),
       _ = require("lodash"),
       User = require("../Model/User"),
+      Project = require("../Model/Project"),
+      Department = require("../Model/Department"),
       {mailer} = require("../Middleware/Helpers/mailHelper");
 
 const {forgotPassword} = require("../Template/emailTemplate");
@@ -13,8 +15,21 @@ const Signin = async (req, res) => {
         isValid = await comparePassword(password, userData.password)
         if (isValid) {
             data = await accessToken({id: userData._id, email})
-            User.findById(userData._id, '_id name email isAdmin department_id').populate('department_id', '_id name original_name').then(response => {
-                data = {...data, isAdmin: response.isAdmin}
+            User.findById(userData._id, '_id name email isAdmin department_id').populate('department_id', '_id name original_name').then(async response => {
+
+                let userActive = await User.find({status: true}).count().exec()
+                let userInActive = await User.find({status: false}).count().exec()
+                let projectActive = await Project.find({status: true}).count().exec()
+                let projectInActive = await Project.find({status: false}).count().exec()
+                let departmentActive = await Department.find({status: true}).count().exec()
+                let departmentInActive = await Department.find({status: false}).count().exec()
+                
+                let user = {active: userActive, inactive: userInActive}
+                let project = {active: projectActive, inactive: projectInActive}
+                let department = {active: departmentActive, inactive: departmentInActive}
+            
+                let counts = {user, project, department}
+                data = {...data, isAdmin: response.isAdmin, counts}
                 return res.status(200).json({message : constant.USER_LOGIN_SUCCESS, code : 200, data})
             })
             // await User.findOneAndUpdate({email, password: userData.password}, data, {upsert : true})
@@ -78,10 +93,15 @@ const Logout = async (req, res) => {
     return res.status(200).json({message : constant.USER_LOGOUT, code : 200})
 }
 
+const TestMethod = async (req, res) => {
+    return res.status(200).json({code : 200})
+}
+
 module.exports = {
     Signin,
     SignUp,
     Logout,
+    TestMethod,
     ResetPassword,
     ForgotPassword
 }

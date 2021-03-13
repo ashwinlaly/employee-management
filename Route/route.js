@@ -22,6 +22,7 @@ module.exports = (function() {
     router.post("/signin", [signinValidator], authController.Signin)
     router.post("/signup", [signupValidator], authController.SignUp)
     router.post("/reset/password", authController.ForgotPassword)
+    router.get("/test", authController.TestMethod)
     router.post("/logout", authController.Logout)
 
     router.use("*", verifyToken)

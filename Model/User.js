@@ -26,10 +26,14 @@ const userSchema = new Mongoose.Schema({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'departments'
     },
-    projects : [{
+    project : {
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'projects'
-    }],
+    },
+    // projects : [{
+    //     type: Mongoose.Schema.Types.ObjectId,
+    //     ref: 'projects'
+    // }],
     created_at: { type: Date, default: Date.now },
     status : {
         type : Boolean,

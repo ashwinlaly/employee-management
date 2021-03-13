@@ -40,10 +40,21 @@ module.exports = [
         .bail()
         .custom(checkValidMongoID)
         .bail(),
-    (req, res, next) => {
+    check("project")
+        .trim()
+        .notEmpty()
+        .withMessage("Please select Project")
+        .bail()
+        .custom(checkValidMongoID)
+        .bail(),
+    (req, res, next) => {        
         const errors = validationResult(req).formatWith(errorFormatter)
         if(!errors.isEmpty()){
-            return res.status(200).json({message: constant.CREATE_EMPLOYEE_ERROR, code : 422, error: errors.array()})
+            if(req.method === "PATCH") {
+                return res.status(200).json({message: constant.UPDATE_EMPLOYEE_ERROR, code : 422, error: errors.array()})
+            } else {
+                return res.status(200).json({message: constant.CREATE_EMPLOYEE_ERROR, code : 422, error: errors.array()})
+            }
         }
         next()
     }

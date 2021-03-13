@@ -55,7 +55,7 @@ const employeeAppliedForLeave = ({user_name, from_date, to_date, reason}) => {
     )
 }
 
-const approvedLeave = ({from_date, to_date, reason}) => {
+const approvedLeave = ({from_date, to_date, reason, status}) => {
     return (
         `<table>
             <tr>
@@ -63,12 +63,12 @@ const approvedLeave = ({from_date, to_date, reason}) => {
                 <td>${from_date} - ${to_date}</td>
             </tr>
             <tr>
-                <td>Reason : </td>
-                <td>${reason}</td>
+                <td>Status : </td>
+                <td>${status}</td>
             </tr>
             <tr>
-                <td>Status : </td>
-                <td>Approved</td>
+                <td>Reason : </td>
+                <td>${reason}</td>
             </tr>
         </table>`
     )
