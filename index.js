@@ -34,3 +34,5 @@ db.connect(STATUS => {
         })
     }
 })
+
+module.exports = app

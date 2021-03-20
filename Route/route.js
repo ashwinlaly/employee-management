@@ -14,6 +14,7 @@ const {verifyToken} = require("../Middleware/Helpers/authHelper");
 // CONTROLLER
 const authController = require("../Controller/authController")
 const projectController = require("../Controller/projectController")
+const holidayController = require("../Controller/holidayController")
 const employeeController = require("../Controller/employeeController")
 const departmentController = require("../Controller/departmentController")
 
@@ -38,6 +39,12 @@ module.exports = (function() {
     router.delete("/project/:id", projectController.deleteProject)
     router.post("/project", [projectValidator], projectController.createProject)
     router.patch("/project/:id", [projectValidator], projectController.updateProject)
+
+    router.get("/holiday", holidayController.getAllHoliday)
+    router.get("/holiday/:id", holidayController.getOneHoliday)
+    router.delete("/holiday/:id", holidayController.deleteHoliday)
+    router.post("/holiday", holidayController.createHoliday)
+    router.patch("/holiday/:id", holidayController.updateHoliday)
 
     router.get("/department", departmentController.getDepartmentList)
     router.get("/department/:id", departmentController.getDepartmentById)
