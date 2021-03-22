@@ -6,5 +6,3 @@ sudo apt-get install jenkins
 
 sudo systemctl start jenkins
 sudo systemctl status jenkins
-
-c238d0a7929651d1ccf161ad5b31d207cf2743d0
