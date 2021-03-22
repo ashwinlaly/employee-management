@@ -5,7 +5,7 @@ const Holiday = require("../Model/Holiday");
 
 
 const getAllHoliday = (req, res) => {
-    Holiday.find({}, '_id name status').then(data => {
+    Holiday.find({}, '_id name status date').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_HOLIDAY_SUCCESS, code: 200, data})
         }

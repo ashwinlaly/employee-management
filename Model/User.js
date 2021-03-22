@@ -1,6 +1,12 @@
 const Mongoose = require("mongoose");
 
 const userSchema = new Mongoose.Schema({
+    emp_id : {
+        type : String,
+        trim : true,
+        minLength : 4,
+        maxLength : 30
+    },
     name : {
         type : String,
         lowercase : true,
@@ -29,6 +35,9 @@ const userSchema = new Mongoose.Schema({
     project : {
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'projects'
+    },
+    taken_leave : {        
+        type: Number, default: 0
     },
     // projects : [{
     //     type: Mongoose.Schema.Types.ObjectId,

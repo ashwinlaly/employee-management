@@ -13,6 +13,14 @@ const leaveSchema = new Mongoose.Schema({
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'users'
     },
+    approval_by :{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    leave_type : {
+        type : Number,
+        default : 0
+    },
     status : {
         type : Number,
         default : 0

@@ -13,6 +13,9 @@ const departmentSchema = new Mongoose.Schema({
         minLength : 4,
         maxLength : 30
     },
+    total_leave : {
+        type: Number, default: 14
+    },
     created_at: { type: Date, default: Date.now },
     status : {
         type : Boolean,

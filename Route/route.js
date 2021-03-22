@@ -27,6 +27,8 @@ module.exports = (function() {
     router.post("/logout", authController.Logout)
 
     router.use("*", verifyToken)
+    router.get("/profile", employeeController.getMyProfile)
+    router.post("/profile", employeeController.updateMyProfile)
     router.get("/employee", employeeController.getAllEmployee)
     router.post("/profile/password", authController.ResetPassword)
     router.get("/employee/:id", employeeController.getOneEmployee)

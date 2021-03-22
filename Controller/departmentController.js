@@ -4,7 +4,7 @@ const constant = require("../constant"),
 const Department = require("../Model/Department");
 
 const getDepartmentList = (req, res) => {
-    Department.find({}, '_id name original_name status').then(data => {
+    Department.find({}, '_id name original_name total_leave status').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.LISTING_DEPARTMENT_SUCCESS, code: 200, data})
         }
@@ -14,7 +14,7 @@ const getDepartmentList = (req, res) => {
 
 const getDepartmentById = (req, res) => {
     department_id = req.params.id
-    Department.findById(department_id, '_id name original_name status').then(data => {
+    Department.findById(department_id, '_id name original_name total_leave status').then(data => {
         if(!_.isEmpty(data)){
             return res.status(200).json({message: constant.GET_DEPARTMENT_SUCCESS, code: 200, data})
         }
@@ -23,12 +23,13 @@ const getDepartmentById = (req, res) => {
 }
 
 const createDepartment = async (req, res) => {
-    const {name, original_name} = req.body
+    const {name, original_name, total_leave} = req.body
     Department.findOne({name}).then(data => {
         if(_.isEmpty(data)) {
             let department = new Department;
             department.name = name
             department.status = status
+            department.total_leave = total_leave
             department.original_name = original_name
             department.save(err => {
                 if(!err) {
@@ -43,8 +44,8 @@ const createDepartment = async (req, res) => {
 
 const updateDepartment = (req, res) => {
     _id = req.params.id
-    const {name, original_name, status} = req.body
-    Department.findByIdAndUpdate(_id, {name, original_name, status}, (error, data) => {
+    const {name, original_name, status, total_leave} = req.body
+    Department.findByIdAndUpdate(_id, {name, original_name, total_leave, status}, (error, data) => {
         if(_.isEmpty(error)) {
             return res.status(200).json({message: constant.UPDATE_DEPARTMENT_SUCCESS, code: 200})
         } else {
