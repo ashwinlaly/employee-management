@@ -104,10 +104,10 @@ const getOneEmployee = async (req, res) => {
 
 const applyLeave = async (req, res) => {
     let {from_date, to_date, reason, leave_type, approval_by} = req.body
-    let difference = moment(to_date).diff(moment(from_date), "days")
+    let difference = moment(to_date).diff(moment(from_date), "days") +1 
     const userLeaves = await User.findById(req.user_id).populate("department_id", "total_leave")
     if(userLeaves.taken_leave + difference <= userLeaves.department_id.total_leave) {
-        await User.findByIdAndUpdate(req.user_id, {taken_leave : difference})
+        await User.findByIdAndUpdate(req.user_id, {taken_leave : userLeaves.taken_leave + difference})
         let leave = new Leave
         leave.from_date = from_date
         leave.to_date = to_date
